@@ -1,14 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-    <script type="module" crossorigin src="/assets/index-7lc4qGbR.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-pzSqxZMM.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./main.css" />
+		<title>Результат выполнения первого задания</title>
+	</head>
+	<body>
+		<div class="main">
+			<h1 className="text-4xl font-bold">
+				Результат выполнения первого задания
+			</h1>
+			<div className="subtask">
+				<h2 className="text-2xl font-semibold">Команда ping</h2>
+				<div class="code-block">~$ ping kubsu.ru</div>
+				<img
+					src="./ping.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+			</div>
+			<div className="subtask">
+				<h2 className="">Команда nslookup</h2>
+				<div class="code-block">~$ nslookup -type=A kubsu.ru</div>
+				<img
+					src="./nslookup1.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+				<div class="code-block">~$ nslookup -type=A kubsu-dev.ru</div>
+				<img
+					src="./nslookup2.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+				<div class="code-block">~$ nslookup -type=MX kubsu.ru</div>
+				<img
+					src="./nslookup3.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+				<div class="code-block">~$ nslookup -type=MX kubsu-dev.ru</div>
+				<img
+					src="./nslookup4.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+			</div>
+			<div className="subtask">
+				<h2 className="text-2xl font-semibold">Команда whios</h2>
+				<div class="code-block">~$ whois kubsu.ru</div>
+				<img
+					src="./whois1.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+				<div class="code-block">~$ whois kubsu-dev.ru</div>
+				<img
+					src="./whois2.jpg"
+					alt=""
+					className="rounded-xl border border-white w-[800px]"
+				/>
+			</div>
+		</div>
+	</body>
 </html>
