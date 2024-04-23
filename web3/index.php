@@ -6,7 +6,7 @@
     if (!empty($_GET['save'])) {
       print('<div class="message">Спасибо, данные сохранены.</div>');
     }
-    include('form.php');
+    include('form_data.php');
     exit();
   }
 
