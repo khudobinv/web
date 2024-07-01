@@ -34,32 +34,45 @@
             <div><?php echo $messages['birthday']?></div>
         </div>
         <div class="ent">
-            <div>Пол:</div>
-            <label>
-                <input type="radio" name="gender" value="male" <?php if($values['gender'] == 'male') echo 'checked'; ?>>
-                <span class="<?php echo ($errors['gender'] != NULL) ? 'colred' : ''; ?>">Мужской</span>
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="gender" value="female" <?php if($values['gender'] == 'female') echo 'checked'; ?>>
-                <span class="<?php echo ($errors['gender'] != NULL) ? 'colred' : ''; ?>">Женский</span>
-            </label>
-            <div><?php echo $messages['gender']?></div>
+            <p class="text-xs text-white/20">Пол</p>
+            <div class="flex gap-2 text-sm"><label>
+                    <input type="radio" name="gender"
+                           value="male" <?php if ($values["gender"] == "male") {
+                        echo "checked";
+                    } ?>>
+                    <span class="<?php echo $errors["gender"] != null
+                        ? "colred"
+                        : ""; ?>">Мужской</span>
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="gender"
+                           value="female" <?php if (
+                        $values["gender"] == "female"
+                    ) {
+                        echo "checked";
+                    } ?>>
+                    <span class="<?php echo $errors["gender"] != null
+                        ? "colred"
+                        : ""; ?>">Женский</span>
+                </label>
+                <div><?php echo $messages["gender"]; ?></div>
+            </div>
         </div>
         <div class="ent">
             <select class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['like_lang'] != NULL) ? 'borred' : ''; ?>" name="like_lang[]" id="like_lang" multiple="multiple">
-                <option disabled selected>Любимый язык программирования</option>
-                <option value="Pascal" <?php echo (in_array('Pascal', $like_langsa)) ? 'selected' : ''; ?>>Pascal</option>
-                <option value="C" <?php echo (in_array('C', $like_langsa)) ? 'selected' : ''; ?>>C</option>
-                <option value="C++" <?php echo (in_array('C++', $like_langsa)) ? 'selected' : ''; ?>>C++</option>
-                <option value="JavaScript" <?php echo (in_array('JavaScript', $like_langsa)) ? 'selected' : ''; ?>>JavaScript</option>
-                <option value="PHP" <?php echo (in_array('PHP', $like_langsa)) ? 'selected' : ''; ?>>PHP</option>
-                <option value="Python" <?php echo (in_array('Python', $like_langsa)) ? 'selected' : ''; ?>>Python</option>
-                <option value="Java" <?php echo (in_array('Java', $like_langsa)) ? 'selected' : ''; ?>>Java</option>
-                <option value="Haskel" <?php echo (in_array('Haskel', $like_langsa)) ? 'selected' : ''; ?>>Haskel</option>
-                <option value="Clojure" <?php echo (in_array('Clojure', $like_langsa)) ? 'selected' : ''; ?>>Clojure</option>
-                <option value="Prolog" <?php echo (in_array('Prolog', $like_langsa)) ? 'selected' : ''; ?>>Prolog</option>
-                <option value="Scala" <?php echo (in_array('Scala', $like_langsa)) ? 'selected' : ''; ?>>Scala</option>
+                <option disabled class="text-xs">Любимый язык программирования</option>
+                <option value="Pascal" <?php echo (in_array('Pascal', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Pascal</option>
+                <option value="C" <?php echo (in_array('C', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>C</option>
+                <option value="C++" <?php echo (in_array('C++', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>C++</option>
+                <option value="JavaScript" <?php echo (in_array('JavaScript', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>JavaScript</option>
+                <option value="PHP" <?php echo (in_array('PHP', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>PHP</option>
+                <option value="Python" <?php echo (in_array('Python', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Python</option>
+                <option value="Java" <?php echo (in_array('Java', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Java</option>
+                <option value="Haskel" <?php echo (in_array('Haskel', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Haskel</option>
+                <option value="Clojure" <?php echo (in_array('Clojure', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Clojure</option>
+                <option value="Prolog" <?php echo (in_array('Prolog', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Prolog</option>
+                <option value="Scala" <?php echo (in_array('Scala', $favoriteLanguagesSA)) ? 'selected' : ''; ?>>Scala</option>
             </select>
             <div><?php echo $messages['like_lang']?></div>
         </div>

@@ -3,7 +3,7 @@
   session_start();
   $log = !empty($_SESSION['login']);
   
-  function del_cook($cook, $vals = 0){
+  function deleteCookies($cook, $vals = 0){
     setcookie($cook.'_error', '', 100000);
     if($vals) setcookie($cook.'_value', '', 100000);
   }
@@ -15,101 +15,98 @@
   }
 
   if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $fullName = (!empty($_COOKIE['fullName_error']) ? $_COOKIE['fullName_error'] : '');
-    $phone = (!empty($_COOKIE['phone_error']) ? $_COOKIE['phone_error'] : '');
-    $email = (!empty($_COOKIE['email_error']) ? $_COOKIE['email_error'] : '');
-    $birthday = (!empty($_COOKIE['birthday_error']) ? $_COOKIE['birthday_error'] : '');
-    $gender = (!empty($_COOKIE['gender_error']) ? $_COOKIE['gender_error'] : '');
-    $like_lang = (!empty($_COOKIE['like_lang_error']) ? $_COOKIE['like_lang_error'] : '');
-    $biography = (!empty($_COOKIE['biography_error']) ? $_COOKIE['biography_error'] : '');
-    $agreement = (!empty($_COOKIE['agreement_error']) ? $_COOKIE['agreement_error'] : '');
+      $fullName = (!empty($_COOKIE['fullName_error']) ? $_COOKIE['fullName_error'] : '');
+      $phone = (!empty($_COOKIE['phone_error']) ? $_COOKIE['phone_error'] : '');
+      $email = (!empty($_COOKIE['email_error']) ? $_COOKIE['email_error'] : '');
+      $birthday = (!empty($_COOKIE['birthday_error']) ? $_COOKIE['birthday_error'] : '');
+      $gender = (!empty($_COOKIE['gender_error']) ? $_COOKIE['gender_error'] : '');
+      $like_lang = (!empty($_COOKIE['like_lang_error']) ? $_COOKIE['like_lang_error'] : '');
+      $biography = (!empty($_COOKIE['biography_error']) ? $_COOKIE['biography_error'] : '');
+      $agreement = (!empty($_COOKIE['agreement_error']) ? $_COOKIE['agreement_error'] : '');
 
-    $errors = array();
-    $messages = array();
-    $values = array();
-    $error = true;
-    
-    function setVal($enName, $param){
-      global $values;
-      $values[$enName] = empty($param) ? '' : strip_tags($param);
-    }
+      $errors = array();
+      $messages = array();
+      $values = array();
+      $error = true;
 
-    function val_empty($enName, $val){
-      global $errors, $messages, $error, $values;
-      if($error) 
-        $error = empty($_COOKIE[$enName.'_error']);
-
-      $errors[$enName] = !empty($_COOKIE[$enName.'_error']);
-      $messages[$enName] = "<div class='messageError'>$val</div>";
-      $values[$enName] = empty($_COOKIE[$enName.'_value']) ? '' : strip_tags($_COOKIE[$enName.'_value']);
-      del_cook($enName);
-      return;
-    }
-
-    if (!empty($_COOKIE['save'])) {
-      setcookie('save', '', 100000);
-      setcookie('login', '', 100000);
-      setcookie('password', '', 100000);
-      $messages['success'] = 'Спасибо, результаты сохранены.';
-      if (!empty($_COOKIE['password'])) {
-        $messages['info'] = sprintf('Вы можете <a href="login.php">войти</a> с логином <strong>%s</strong>
-          и паролем <strong>%s</strong> для изменения данных.',
-          strip_tags($_COOKIE['login']),
-          strip_tags($_COOKIE['password']));
+      function setValue($enName, $param)
+      {
+          global $values;
+          $values[$enName] = empty($param) ? '' : strip_tags($param);
       }
-    }
-    
-    val_empty('fullName', $fullName);
-    val_empty('phone', $phone);
-    val_empty('email', $email);
-    val_empty('birthday', $birthday);
-    val_empty('gender', $gender);
-    val_empty('like_lang', $like_lang);
-    val_empty('biography', $biography);
-    val_empty('agreement', $agreement);
-    
-    $like_langsa = explode(',', $values['like_lang']);
 
-    // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
-    // ранее в сессию записан факт успешного логина.
-    if ($error && !empty($_SESSION['login'])) {
+      function validateEmpty($enName, $val)
+      {
+          global $errors, $messages, $error, $values;
+          if ($error)
+              $error = empty($_COOKIE[$enName . '_error']);
 
-      conn();
-      try {
-        $dbFD = $db->prepare("SELECT * FROM form_data WHERE user_id = ?");
-        $dbFD->execute([$_SESSION['user_id']]);
-        $fet = $dbFD->fetchAll(PDO::FETCH_ASSOC)[0];
-        $form_id = $fet['id'];
-        $_SESSION['form_id'] = $form_id;
-        $dbL = $db->prepare("SELECT l.name FROM form_data_lang f
+          $errors[$enName] = !empty($_COOKIE[$enName . '_error']);
+          $messages[$enName] = "<div class='messageError'>$val</div>";
+          $values[$enName] = empty($_COOKIE[$enName . '_value']) ? '' : strip_tags($_COOKIE[$enName . '_value']);
+          deleteCookies($enName);
+          return;
+      }
+
+      if (!empty($_COOKIE['save'])) {
+          setcookie('save', '', 100000);
+          setcookie('login', '', 100000);
+          setcookie('password', '', 100000);
+          $messages['success'] = 'Спасибо, результаты сохранены.';
+          if (!empty($_COOKIE['password'])) {
+              $messages['info'] = sprintf('Вы можете <a href="login.php">войти</a> с логином <strong>%s</strong>
+          и паролем <strong>%s</strong> для изменения данных.',
+                  strip_tags($_COOKIE['login']),
+                  strip_tags($_COOKIE['password']));
+          }
+      }
+
+      validateEmpty('fullName', $fullName);
+      validateEmpty('phone', $phone);
+      validateEmpty('email', $email);
+      validateEmpty('birthday', $birthday);
+      validateEmpty('gender', $gender);
+      validateEmpty('like_lang', $like_lang);
+      validateEmpty('biography', $biography);
+      validateEmpty('agreement', $agreement);
+
+      $favoriteLanguagesSA = explode(',', $values['like_lang']);
+
+      // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
+      // ранее в сессию записан факт успешного логина.
+      if ($error && !empty($_SESSION['login'])) {
+
+          conn();
+          try {
+              $dbFD = $db->prepare("SELECT * FROM form_data WHERE user_id = ?");
+              $dbFD->execute([$_SESSION['user_id']]);
+              $fet = $dbFD->fetchAll(PDO::FETCH_ASSOC)[0];
+              $form_id = $fet['id'];
+              $_SESSION['form_id'] = $form_id;
+              $dbL = $db->prepare("SELECT l.name FROM form_data_lang f
                               LEFT JOIN languages l ON l.id = f.id_lang
                               WHERE f.id_form = ?");
-        $dbL->execute([$form_id]);
-        $like_langsa = [];
-        foreach($dbL->fetchAll(PDO::FETCH_ASSOC) as $item){
-          $like_langsa[] = $item['name'];
-        }
-        setVal('fullName', $fet['fullName']);
-        setVal('phone', $fet['phone']);
-        setVal('email', $fet['email']);
-        setVal('birthday', date("Y-m-d", $fet['birthday']));
-        setVal('gender', $fet['gender']);
-        setVal('like_lang', $like_lang);
-        setVal('biography', $fet['biography']);
-        setVal('agreement', $fet['agreement']);
+              $dbL->execute([$form_id]);
+              $favoriteLanguagesSA = [];
+              foreach ($dbL->fetchAll(PDO::FETCH_ASSOC) as $item) {
+                  $favoriteLanguagesSA[] = $item['name'];
+              }
+              setValue('fullName', $fet['fullName']);
+              setValue('phone', $fet['phone']);
+              setValue('email', $fet['email']);
+              setValue('birthday', date("Y-m-d", $fet['birthday']));
+              setValue('gender', $fet['gender']);
+              setValue('like_lang', $like_lang);
+              setValue('biography', $fet['biography']);
+              setValue('agreement', $fet['agreement']);
+          } catch (PDOException $e) {
+              print('Error : ' . $e->getMessage());
+              exit();
+          }
       }
-      catch(PDOException $e){
-        print('Error : ' . $e->getMessage());
-        exit();
-      }
-      //  print_r($values);   
-      // TODO: загрузить данные пользователя из БД и заполнить переменную $values, предварительно санитизовав.
-      // printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['user_id']);
-    }
-    
-    include('form.php');
+
+      include('form.php');
   }
-  // Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
   else {
     $fullName = (!empty($_POST['fullName']) ? $_POST['fullName'] : '');
     $phone = (!empty($_POST['phone']) ? $_POST['phone'] : '');
@@ -121,14 +118,14 @@
     $agreement = (!empty($_POST['agreement']) ? $_POST['agreement'] : '');
 
     if(isset($_POST['logout_form'])){
-      del_cook('fullName', 1);
-      del_cook('phone', 1);
-      del_cook('email', 1);
-      del_cook('birthday', 1);
-      del_cook('gender', 1);
-      del_cook('like_lang', 1);
-      del_cook('biography', 1);
-      del_cook('agreement', 1);
+      deleteCookies('fullName', 1);
+      deleteCookies('phone', 1);
+      deleteCookies('email', 1);
+      deleteCookies('birthday', 1);
+      deleteCookies('gender', 1);
+      deleteCookies('like_lang', 1);
+      deleteCookies('biography', 1);
+      deleteCookies('agreement', 1);
       session_destroy();
       header('Location: ./');
       exit();
@@ -155,26 +152,26 @@
       return $res;
     }
     
-    if(!val_empty('fullName', 'Заполните поле', empty($fullName))){
-      if(!val_empty('fullName', 'Длина поля > 255 символов', strlen($fullName) > 255)){
-        val_empty('fullName', 'Поле не соответствует требованиям: <i>Фамилия Имя (Отчество)</i>, кириллицей', !preg_match('/^([а-яёА-ЯЁ]+-?[а-яёА-ЯЁ]+)( [а-яёА-ЯЁ]+-?[а-яёА-ЯЁ]+){1,2}$/Diu', $fullName));
+    if(!validateEmpty('fullName', 'Заполните поле', empty($fullName))){
+      if(!validateEmpty('fullName', 'Длина поля > 255 символов', strlen($fullName) > 255)){
+        validateEmpty('fullName', 'Поле не соответствует требованиям: <i>Фамилия Имя (Отчество)</i>, кириллицей', !preg_match('/^([а-яёА-ЯЁ]+-?[а-яёА-ЯЁ]+)( [а-яёА-ЯЁ]+-?[а-яёА-ЯЁ]+){1,2}$/Diu', $fullName));
       }
     }
-    if(!val_empty('phone', 'Заполните поле', empty($phone))){
-      if(!val_empty('phone', 'Длина поля некорректна', strlen($phone) != 11)){
-        val_empty('phone', 'Поле должен содержать только цифры', ($phone != $phone1));
+    if(!validateEmpty('phone', 'Заполните поле', empty($phone))){
+      if(!validateEmpty('phone', 'Длина поля некорректна', strlen($phone) != 11)){
+        validateEmpty('phone', 'Поле должен содержать только цифры', ($phone != $phone1));
       }
     }
-    if(!val_empty('email', 'Заполните поле', empty($email))){
-      if(!val_empty('email', 'Длина поля > 255 символов', strlen($email) > 255)){
-        val_empty('email', 'Поле не соответствует требованию example@mail.ru', !preg_match('/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/', $email));
+    if(!validateEmpty('email', 'Заполните поле', empty($email))){
+      if(!validateEmpty('email', 'Длина поля > 255 символов', strlen($email) > 255)){
+        validateEmpty('email', 'Поле не соответствует требованию example@mail.ru', !preg_match('/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/', $email));
       }
     }
-    if(!val_empty('birthday', "Выберите дату рождения", empty($birthday))){
-      val_empty('birthday', "Неверно введена дата рождения, дата больше настоящей", (strtotime("now") < strtotime($birthday)));
+    if(!validateEmpty('birthday', "Выберите дату рождения", empty($birthday))){
+      validateEmpty('birthday', "Неверно введена дата рождения, дата больше настоящей", (strtotime("now") < strtotime($birthday)));
     }
-    val_empty('gender', "Выберите пол", (empty($gender) || !preg_match('/^(male|female)$/', $gender)));
-    if(!val_empty('like_lang', "Выберите хотя бы один язык", empty($like_lang))){
+    validateEmpty('gender', "Выберите пол", (empty($gender) || !preg_match('/^(male|female)$/', $gender)));
+    if(!validateEmpty('like_lang', "Выберите хотя бы один язык", empty($like_lang))){
       conn();
       try {
         $inQuery = implode(',', array_fill(0, count($like_lang), '?'));
@@ -190,12 +187,12 @@
         exit();
       }
       
-      val_empty('like_lang', 'Неверно выбраны языки', $dbLangs->rowCount() != count($like_lang));
+      validateEmpty('like_lang', 'Неверно выбраны языки', $dbLangs->rowCount() != count($like_lang));
     }
-    if(!val_empty('biography', 'Заполните поле', empty($biography))){
-      val_empty('biography', 'Длина текста > 65 535 символов', strlen($biography) > 65535);
+    if(!validateEmpty('biography', 'Заполните поле', empty($biography))){
+      validateEmpty('biography', 'Длина текста > 65 535 символов', strlen($biography) > 65535);
     }
-    val_empty('agreement', "Ознакомьтесь с контрактом", empty($agreement));
+    validateEmpty('agreement', "Ознакомьтесь с контрактом", empty($agreement));
     
     if ($error) {
       // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
@@ -204,14 +201,14 @@
     }
     else {
       // Удаляем Cookies с признаками ошибок.
-      del_cook('fullName');
-      del_cook('phone');
-      del_cook('email');
-      del_cook('birthday');
-      del_cook('gender');
-      del_cook('like_lang');
-      del_cook('biography');
-      del_cook('agreement');
+      deleteCookies('fullName');
+      deleteCookies('phone');
+      deleteCookies('email');
+      deleteCookies('birthday');
+      deleteCookies('gender');
+      deleteCookies('like_lang');
+      deleteCookies('biography');
+      deleteCookies('agreement');
     }
   
     // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
