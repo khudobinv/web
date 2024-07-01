@@ -9,7 +9,7 @@ function deleteCookies($cook, $vals = 0){
 }
 
 $db;
-function conn(){
+function connectDatabase(){
     global $db;
     include('connection.php');
 }
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $favoriteLanguagesSA = explode(',', $values['like_lang']);
 
     if ($error && !empty($_SESSION['login'])) {
-        conn();
+        connectDatabase();
         try {
             $dbFD = $db->prepare("SELECT * FROM form_data WHERE user_id = ?");
             $dbFD->execute([$_SESSION['user_id']]);
@@ -103,8 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     include('form.php');
-}
-else {
+} else {
     $fullName = (!empty($_POST['fullName']) ? $_POST['fullName'] : '');
     $phone = (!empty($_POST['phone']) ? $_POST['phone'] : '');
     $email = (!empty($_POST['email']) ? $_POST['email'] : '');
@@ -112,7 +111,7 @@ else {
     $gender = (!empty($_POST['gender']) ? $_POST['gender'] : '');
     $like_lang = (!empty($_POST['like_lang']) ? $_POST['like_lang'] : '');
     $biography = (!empty($_POST['biography']) ? $_POST['biography'] : '');
-    $agreement = (!empty($_POST['agreement']) ? $_POST['agreement'] : '');
+    $agreement = (!empty($_POST['agreement']) && $_POST['agreement'] === 'on') ? 1 : 0;
 
     if(isset($_POST['logout_form'])){
         deleteCookies('fullName', 1);
@@ -155,64 +154,72 @@ else {
         }
     }
     if(!validateEmpty('phone', 'Заполните поле', empty($phone))){
-        if(!validateEmpty('phone', 'Длина поля некорректна', strlen($phone) != 11)){
-            validateEmpty('phone', 'Поле должен содержать только цифры', ($phone != $phone1));
+        if(!validateEmpty('phone', 'Длина поля > 50 символов', strlen($phone) > 50)){
+            validateEmpty('phone', 'Поле не соответствует требованиям: <i>+7XXXXXXXXXX</i>', !preg_match('/^\+7[0-9]{10}$/Diu', $phone1));
         }
     }
     if(!validateEmpty('email', 'Заполните поле', empty($email))){
         if(!validateEmpty('email', 'Длина поля > 255 символов', strlen($email) > 255)){
-            validateEmpty('email', 'Поле не соответствует требованию example@mail.ru', !preg_match('/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/', $email));
+            validateEmpty('email', 'Поле не соответствует требованиям: <i>example@mail.ru</i>', !preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/Diu', $email));
         }
     }
-    if(!validateEmpty('birthday', "Выберите дату рождения", empty($birthday))){
-        validateEmpty('birthday', "Неверно введена дата рождения, дата больше настоящей", (strtotime("now") < strtotime($birthday)));
+    if(!validateEmpty('birthday', 'Заполните поле', empty($birthday))){
+        if(!validateEmpty('birthday', 'Некорректная дата', !preg_match('/^\d{4}-\d{2}-\d{2}$/Diu', $birthday))){
+            validateEmpty('birthday', 'Некорректная дата', !checkdate(substr($birthday, 5, 2), substr($birthday, 8, 2), substr($birthday, 0, 4)));
+        }
     }
-    validateEmpty('gender', "Выберите пол", (empty($gender) || !preg_match('/^(male|female)$/', $gender)));
-    if(!validateEmpty('like_lang', "Выберите хотя бы один язык", empty($like_lang))){
-        $total = count($like_lang);
-        validateEmpty('like_lang', "Выберите не больше 4 языков", $total > 4);
+    if(!validateEmpty('gender', 'Заполните поле', empty($gender))){
+        validateEmpty('gender', 'Поле не соответствует требованиям', !in_array($gender, ['male', 'female']));
     }
-    if(!validateEmpty('biography', "Заполните поле", empty($biography))){
-        validateEmpty('biography', "Длина поля > 255 символов", strlen($biography) > 255);
+    if(!validateEmpty('biography', 'Заполните поле', empty($biography))){
+        validateEmpty('biography', 'Длина поля > 5000 символов', strlen($biography) > 5000);
     }
-    validateEmpty('agreement', "Вы не приняли соглашение", empty($agreement));
 
-    if (!$error) {
-        if (!empty($_POST['save'])) {
-            setcookie('fullName', $fullName, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('phone', $phone, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('email', $email, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('birthday', $birthday, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('gender', $gender, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('like_lang', $like_lang, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('biography', $biography, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('agreement', $agreement, time() + 30 * 24 * 60 * 60); //сохраняем на месяц
-            setcookie('save', '1', time() + 60); //сохраняем на минуту
-            header('Location: ./');
-            exit();
-        } else {
-            conn();
+    if ($error) {
+        include('form.php');
+    } else {
+        connectDatabase();
+        if (!empty($_SESSION['user_id'])) {
             try {
-                $dbFD = $db->prepare("INSERT INTO form_data (fullName, phone, email, birthday, gender, biography, agreement, user_id) VALUES (?,?,?,?,?,?,?,?)");
-                $dbFD->execute([$fullName, $phone, $email, strtotime($birthday), $gender, $biography, $agreement, $_SESSION['user_id']]);
-                $form_id = $db->lastInsertId();
-                $_SESSION['form_id'] = $form_id;
-                if (!empty($like_lang)) {
-                    foreach ($like_lang as $lang) {
-                        $dbL = $db->prepare("INSERT INTO form_data_lang (id_form, id_lang) VALUES (?, (SELECT id FROM languages WHERE name = ?))");
-                        $dbL->execute([$form_id, $lang]);
-                    }
-                }
-                setcookie('save', '1', time() + 60); //сохраняем на минуту
-                header('Location: ./');
+                $dbUpdate = $db->prepare("UPDATE form_data SET fullName = :fullName, phone = :phone, email = :email, birthday = :birthday, gender = :gender, biography = :biography, agreement = :agreement WHERE user_id = :user_id");
+                $dbUpdate->execute([
+                    ':fullName' => $fullName,
+                    ':phone' => $phone,
+                    ':email' => $email,
+                    ':birthday' => strtotime($birthday),
+                    ':gender' => $gender,
+                    ':biography' => $biography,
+                    ':agreement' => $agreement,
+                    ':user_id' => $_SESSION['user_id']
+                ]);
+                setcookie('save', '1', time() + 30 * 24 * 60 * 60); // сохранение на 1 месяц
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                exit();
+            } catch (PDOException $e) {
+                print('Error : ' . $e->getMessage());
+                exit();
+            }
+        } else {
+            try {
+                $dbInsert = $db->prepare("INSERT INTO form_data (user_id, fullName, phone, email, birthday, gender, biography, agreement) VALUES (:user_id, :fullName, :phone, :email, :birthday, :gender, :biography, :agreement)");
+                $dbInsert->execute([
+                    ':user_id' => $_SESSION['user_id'],
+                    ':fullName' => $fullName,
+                    ':phone' => $phone,
+                    ':email' => $email,
+                    ':birthday' => strtotime($birthday),
+                    ':gender' => $gender,
+                    ':biography' => $biography,
+                    ':agreement' => $agreement
+                ]);
+                setcookie('save', '1', time() + 30 * 24 * 60 * 60); // сохранение на 1 месяц
+                header('Location: ' . $_SERVER['PHP_SELF']);
                 exit();
             } catch (PDOException $e) {
                 print('Error : ' . $e->getMessage());
                 exit();
             }
         }
-    } else {
-        include('form.php');
     }
 }
 ?>
