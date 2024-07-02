@@ -63,7 +63,8 @@ if (!$haveAdmin) {
         <?php
         $dbFD = $db->query("SELECT * FROM form_data ORDER BY id DESC");
         while ($row = $dbFD->fetch(PDO::FETCH_ASSOC)) {
-            echo '<tr class="border-b border-gray-200 hover:bg-gray-100" data-id=' . $row['id'] . '>
+            echo '<tr class="border-b border-gray-200 hover:bg-gray-100" data-id=' . $row['id'] . '><form>
+            
                             <td class="py-3 px-4">' . $row['id'] . '</td>
                             <td class="py-3 px-4">' . $row['fullName'] . '</td>
                             <td class="py-3 px-4">' . $row['phone'] . '</td>
@@ -81,7 +82,7 @@ if (!$haveAdmin) {
             }
             echo '</td>
                             <td class="py-3 px-4"><a href="./index.php?uid=' . $row['user_id'] . '" target="_blank" class="text-blue-500 hover:underline">Редактировать</a></td>
-                            <td class="py-3 px-4"><button class="remove bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700">Удалить</button></td>
+                            <td class="py-3 px-4"><button class="remove bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700">Удалить</button></td></form>
                         </tr>';
         }
         ?>
