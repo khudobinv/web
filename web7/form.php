@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             <div class="text-red-500"><?php echo $messages['biography']?></div>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="flex gap-1">
             <input type="checkbox" name="agreement" id="agreement" <?php echo ($values['agreement'] != NULL) ? 'checked' : ''; ?>>
             <label for="agreement" class="text-sm <?php echo ($errors['agreement'] != NULL) ? 'text-red-500' : ''; ?>">С контрактом ознакомлен (а)</label>
             <div class="text-red-500"><?php echo $messages['agreement']?></div>
