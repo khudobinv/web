@@ -87,7 +87,7 @@ if (!$haveAdmin) {
             }
             echo '</td>
                             <td class="py-3 px-4"><a href="./index.php?uid=' . $row['user_id'] . '" target="_blank" class="text-blue-500 hover:underline">Редактировать</a></td>
-                            <td class="py-3 px-4"><a href="/removeForm.php?id='. $row['uid'] . '" class="remove bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700">Удалить</a></td></form>
+                            <td class="py-3 px-4"><a href="/removeForm.php?id='. $row['id'] . '" class="remove bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700">Удалить</a></td></form>
                         </tr>';
         }
         ?>
