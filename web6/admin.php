@@ -34,7 +34,11 @@ if (!$haveAdmin) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-   
+    <script
+  src="https://code.jquery.com/jquery-3.6.3.js"
+  integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+  crossorigin="anonymous">
+</script>
     <title>Задание 6 (админка)</title>
 </head>
 
@@ -64,9 +68,9 @@ if (!$haveAdmin) {
         <?php
         $dbFD = $db->query("SELECT * FROM form_data ORDER BY id DESC");
         while ($row = $dbFD->fetch(PDO::FETCH_ASSOC)) {
-            echo '<tr class="border-b border-gray-200 hover:bg-gray-100" data-id=' . $row['id'] . '><form action="./removeForm.php">
+            echo '<tr class="border-b border-gray-200 hover:bg-gray-100" data-id=' . $row['id'] . '><form action="./removeForm.php?uid=''">
             
-                            <td class="py-3 px-4">' . $row['id'] . '</td>
+                            <td class="py-3 px-4">' . $row['id'] .  . $row['user_id'] . '</td>
                             <td class="py-3 px-4">' . $row['fullName'] . '</td>
                             <td class="py-3 px-4">' . $row['phone'] . '</td>
                             <td class="py-3 px-4">' . $row['email'] . '</td>
