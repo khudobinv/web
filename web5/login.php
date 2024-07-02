@@ -68,7 +68,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Задание 5</title>
+    <title>Задание 7</title>
 </head>
 <body class="bg-gray-900 h-screen flex items-center justify-center">
   <div class="flex flex-col gap-2 border-2 border-white/10 rounded-xl text-white p-4 w-1/4">
