@@ -86,14 +86,14 @@
             <div><?php echo $messages['agreement']?></div>
         </div>
         <?php
-            if($log) echo '<button type="submit" class="editBut">Изменить</button>';
+            if($log) echo '<button type="submit" class="p-2 rounded-lg bg-green-600 text-sm hover:bg-opacity-90 transition-colors hover:shadow-lg">Изменить</button>';
             else echo '<button type="submit" class="p-2 rounded-lg bg-green-600 text-sm hover:bg-opacity-90 transition-colors hover:shadow-lg">Отправить</button>';
         ?>
     </form>
         <div class="mt-2 flex justify-between items-center w-full">
             <p class="text-sm opacity-50">Войдите в аккаунт</p>
             <?php
-            if($log) echo '<button type="submit" class="logout_form" name="logout_form">Выйти</button>';
+            if($log) echo '<button type="submit" class="p-2 rounded-lg bg-red-600 text-sm hover:bg-opacity-90 transition-colors hover:shadow-lg">Выйти</button>';
             else echo '<a href="login.php" class="p-2 rounded-lg bg-gray-600 text-sm hover:bg-opacity-90 transition-colors hover:shadow-lg" name="logout_form">Войти</a>';
             ?>
         </div>
