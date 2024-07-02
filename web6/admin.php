@@ -63,7 +63,7 @@ if (!$haveAdmin) {
         <?php
         $dbFD = $db->query("SELECT * FROM form_data ORDER BY id DESC");
         while ($row = $dbFD->fetch(PDO::FETCH_ASSOC)) {
-            echo '<tr class="border-b border-gray-200 hover:bg-gray-100" data-id=' . $row['id'] . '><form action="./index.php">
+            echo '<tr class="border-b border-gray-200 hover:bg-gray-100" data-id=' . $row['id'] . '><form action="./admin.php">
             
                             <td class="py-3 px-4">' . $row['id'] . '</td>
                             <td class="py-3 px-4">' . $row['fullName'] . '</td>
