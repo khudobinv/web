@@ -65,22 +65,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <div class="message"><?php if (isset($messages['success'])) echo $messages['success']; ?></div>
         <div class="message text-blue-500"><?php if (isset($messages['info'])) echo $messages['info']; ?></div>
         <div class="message text-red-500"><?php if (isset($messages['error'])) echo $messages['error']; ?></div>
+
         <div class="flex flex-col gap-1">
-            <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['fio'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php echo $values['fio']; ?>" type="text" name="fio" placeholder="ФИО">
-            <div class="text-red-500"><?php echo $messages['fio']?></div>
+            <p class="text-xs text-white/20">Фамилия, имя и отчество</p>
+            <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['fullName'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php echo $values['fullName']; ?>" type="text" name="fullName" placeholder="Введите фамилию, имя и отчество...">
+            <div class="text-red-500"><?php echo $messages['fullName']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
-            <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['phone'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php echo $values['phone']; ?>" type="tel" name="phone" placeholder="Телефон">
+            <p class="text-xs text-white/20">Номер мобильного телефона</p>
+            <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['phone'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php echo $values['phone']; ?>" type="tel" name="phone" placeholder="Введите номер телефона...">
             <div class="text-red-500"><?php echo $messages['phone']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
-            <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['email'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php echo $values['email']; ?>" type="email" name="email" placeholder="email">
+            <p class="text-xs text-white/20">Адрес электронной почты</p>
+            <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['email'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php echo $values['email']; ?>" type="email" name="email" placeholder="Введите адрес электронной почты...">
             <div class="text-red-500"><?php echo $messages['email']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
+            <p class="text-xs text-white/20">Дата рождения</p>
             <input class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['birthday'] != NULL) ? 'border-red-500' : ''; ?>" value="<?php if (strtotime($values['birthday']) != '') echo $values['birthday']; ?>" type="date" name="birthday">
             <div class="text-red-500"><?php echo $messages['birthday']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
             <div class="text-xs text-white/20">Пол</div>
             <div class="flex gap-2 text-sm">
@@ -95,9 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             </div>
             <div class="text-red-500"><?php echo $messages['gender']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
+            <p class="text-xs text-white/20">Любимый язык программирования</p>
             <select class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['like_lang'] != NULL) ? 'border-red-500' : ''; ?>" name="like_lang[]" id="like_lang" multiple="multiple">
-                <option disabled selected>Любимый язык программирования</option>
+                <option disabled selected>Выберите языки</option>
                 <option value="Pascal" <?php echo (in_array('Pascal', $like_langsa)) ? 'selected' : ''; ?>>Pascal</option>
                 <option value="C" <?php echo (in_array('C', $like_langsa)) ? 'selected' : ''; ?>>C</option>
                 <option value="C++" <?php echo (in_array('C++', $like_langsa)) ? 'selected' : ''; ?>>C++</option>
@@ -112,15 +123,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             </select>
             <div class="text-red-500"><?php echo $messages['like_lang']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
-            <textarea name="biography" placeholder="Биография" class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['biography'] != NULL) ? 'border-red-500' : ''; ?>"><?php echo checkInput_decode($values['biography']); ?></textarea>
+            <p class="text-xs text-white/20">Биография</p>
+            <textarea name="biography" placeholder="Расскажите о себе..." class="rounded-lg p-1 border-2 border-white/10 bg-gray-900 text-sm w-full <?php echo ($errors['biography'] != NULL) ? 'border-red-500' : ''; ?>"><?php echo checkInput_decode($values['biography']); ?></textarea>
             <div class="text-red-500"><?php echo $messages['biography']?></div>
         </div>
+
         <div class="flex flex-col gap-1">
-            <input type="checkbox" name="oznakomlen" id="oznakomlen" <?php echo ($values['oznakomlen'] != NULL) ? 'checked' : ''; ?>>
-            <label for="oznakomlen" class="text-sm <?php echo ($errors['oznakomlen'] != NULL) ? 'text-red-500' : ''; ?>">С контрактом ознакомлен (а)</label>
-            <div class="text-red-500"><?php echo $messages['oznakomlen']?></div>
+            <input type="checkbox" name="agreement" id="agreement" <?php echo ($values['agreement'] != NULL) ? 'checked' : ''; ?>>
+            <label for="agreement" class="text-sm <?php echo ($errors['agreement'] != NULL) ? 'text-red-500' : ''; ?>">С контрактом ознакомлен (а)</label>
+            <div class="text-red-500"><?php echo $messages['agreement']?></div>
         </div>
+
         <?php
         if($log) {
             echo '<button type="submit" class="p-2 rounded-lg bg-green-600 text-sm hover:bg-opacity-90 transition-colors hover:shadow-lg">Изменить</button>';
