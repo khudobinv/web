@@ -1,4 +1,4 @@
-```stl
+[```stl
 solid DetailedPenis
   # Основание (12-угольник вместо 8-угольника)
   facet normal 0 0 -1
@@ -162,3 +162,6 @@ solid DetailedPenis
 
 endsolid DetailedPenis
 ```
+](https://3dexport.com/3dmodel-realistic-dick-low-poly-369541.htm?srsltid=AfmBOoqBAL6GAtKaogInL5-zCG6hYdqnGqYm-qUQVf-ROvmcF7bhxYyI
+
+напиши код stl для этой модели)
