@@ -1,6 +1,6 @@
 ```stl
-solid FixedRealisticDickLowPoly
-  # Основание (8-угольник, полностью закрытое)
+solid ColoredRealisticDickLowPoly
+  # Основание (8-угольник)
   facet normal 0 0 -1
     outer loop
       vertex 0 0 0
@@ -116,7 +116,7 @@ solid FixedRealisticDickLowPoly
     endloop
   endfacet
 
-  # Головка (закрытая и более плавная, до z=5)
+  # Головка (закрытая и плавная, до z=5)
   facet normal 0 0 1
     outer loop
       vertex 1 0 4
@@ -167,5 +167,5 @@ solid FixedRealisticDickLowPoly
     endloop
   endfacet
 
-endsolid FixedRealisticDickLowPoly
+endsolid ColoredRealisticDickLowPoly
 ```
