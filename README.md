@@ -1,4 +1,5 @@
-```stlsolid FixedRealisticDickLowPoly
+```stl
+solid FixedRealisticDickLowPoly
   # Основание (8-угольник, полностью закрытое)
   facet normal 0 0 -1
     outer loop
