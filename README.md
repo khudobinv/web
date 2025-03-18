@@ -1,3 +1,4 @@
+```
 solid DetailedPenis
   # Основание (12-угольник вместо 8-угольника)
   facet normal 0 0 -1
@@ -160,3 +161,4 @@ solid DetailedPenis
   endfacet
 
 endsolid DetailedPenis
+```
